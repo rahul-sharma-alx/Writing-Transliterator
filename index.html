@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transliterator | Convert English to Indian Languages</title>
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&family=Noto+Sans+Bengali&family=Noto+Sans+Tamil&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- ✅ SEO Meta Tags -->
+    <meta name="description" content="Use our free transliteration tool to convert English text into Hindi, Bengali, Tamil, and other Indian languages in real-time.">
+    <meta name="keywords" content="transliterator, hindi typing, english to hindi, bengali, tamil, telugu, gujarati, malayalam, marathi, punjabi">
+    <meta name="author" content="Alxpace">
+    
+    <!-- ✅ Open Graph (OG) Meta Tags for Social Sharing -->
+    <meta property="og:title" content="Transliterator | Convert English to Indian Languages">
+    <meta property="og:description" content="Convert English words into Indian languages like Hindi, Bengali, Tamil, Telugu, and more instantly.">
+    <meta property="og:image" content="https://alxpace.netlify.app/og-image.jpg"> <!-- Replace with actual image URL -->
+    <meta property="og:url" content="https://alxpace.netlify.app/">
+    <meta property="og:type" content="website">
+    
+    <!-- ✅ Twitter Card for better visibility on Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Transliterator | Convert English to Indian Languages">
+    <meta name="twitter:description" content="Easily convert English words into Hindi, Bengali, Tamil, and more using our free transliteration tool.">
+    <meta name="twitter:image" content="https://alxpace.netlify.app/og-image.jpg">
+    
+    <!-- ✅ Canonical URL to avoid duplicate content issues -->
+    <link rel="canonical" href="https://alxpace.netlify.app/">
+
+    <!-- ✅ Favicon -->
+    <link rel="icon" href="https://alxpace.netlify.app/favicon.ico" type="image/x-icon">
+
+    <!-- ✅ Structured Data (JSON-LD) for Google -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Transliterator",
+        "url": "https://alxpace.netlify.app/",
+        "description": "Convert English text into Hindi, Bengali, Tamil, Telugu, and other Indian languages in real-time.",
+        "applicationCategory": "Utilities",
+        "image": "https://alxpace.netlify.app/og-image.jpg",
+        "author": {
+            "@type": "Person",
+            "name": "Alxpace",
+            "url": "https://alxpace.netlify.app/"
+        }
+    }
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: auto;
+            text-align: center;
+            transition: background 0.3s, color 0.3s;
+        }
+        .navbar {
+            width: 100%;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .desktop-navbar {
+            display: none;
+        }
+        @media (min-width: 768px) {
+            .desktop-navbar {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+                padding: 10px 20px;
+                background: #ffffff;
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            }
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 80vh;
+        }
+        .intro {
+            background: #fff3cd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            position: relative;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .intro.hidden {
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+        }
+        .question {
+            cursor: pointer;
+            font-size: 18px;
+            display: none;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .controls button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .toggle-mode {
+            cursor: pointer;
+            font-size: 20px;
+            padding: 5px;
+            margin-left: 10px;
+        }
+        .dark-mode {
+            background: #333;
+            color: white;
+        }
+        .dark-mode .container, .dark-mode .navbar, .dark-mode .desktop-navbar {
+            background: #444;
+            color: white;
+        }
+        .dark-mode textarea, .dark-mode select {
+            background: #555;
+            color: white;
+            border: 1px solid #777;
+        }
+        textarea {
+            width: 100%;
+            height: 300px;
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: none;
+            min-height: 50vh;
+        }
+        select {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        select:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+        .contact {
+            cursor: pointer;
+            font-size: 18px;
+            margin-right: 20px;
+        }
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            z-index: 1000;
+        }
+
+        .notification {
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            opacity: 0.95;
+            transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+            transform: translateY(0);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .notification.success { background-color: #28a745; }  /* Green */
+        .notification.warning { background-color: #ffc107; color: black; } /* Yellow */
+        .notification.error { background-color: #dc3545; }   /* Red */
+
+        .notification.fade-out {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="desktop-navbar">
+        <div class="logo">Alxpace</div>
+        <div class="contact">Contact</div>
+    </div>
+    <div class="navbar">
+        <span class="toggle-mode" onclick="toggleDarkMode()">🌙</span>
+        <span class="question" onclick="toggleIntro()">?</span>
+    </div>
+    <div id="notification-container" class="notification-container"></div>
+
+    <div class="intro" id="intro">
+        <strong>How to Use:</strong> Select a language from the dropdown. Type in English, and when you press space, it will automatically convert to the selected Indian language.
+        like 'pranaam' to 'प्रणाम'
+        <button onclick="dismissIntro()">x</button>
+    </div>
+    <div class="container">
+        <h2>Writing Transliterator</h2>
+        <select id="languageSelect"></select>
+        <textarea id="inputBox" placeholder="Type here..."></textarea>
+        <div class="controls">
+            <button type="button" onclick="copyText()" title="Copy"><i class="ri-file-copy-2-fill" style="color: rgb(72, 71, 71); size: 20px;"></i></button>
+            <button type="button" onclick="saveText()" title="Save as Text"><i class="ri-save-line" style="color: green; font-size: 24px;"></i></button>
+            <button type="button" onclick="savePDF()" title="Save as PDF"><i class="ri-file-pdf-2-line" style="color: red; size: 20px;"></i></button>
+            <button type="button" onclick="saveAsImage()" title="Save as Image"><i class="ri-import-line" style="color: orange; font-size: 24px;"></i></button>
+            <button type="button" onclick="shareText()" title="Share"><i class="ri-share-box-line" style="color: purple; font-size: 24px;"></i></button>
+        </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+            const allLanguages = {
+                "hi": "Hindi", "bn": "Bengali", "ta": "Tamil", "te": "Telugu", "gu": "Gujarati",
+                "kn": "Kannada", "ml": "Malayalam", "mr": "Marathi", "or": "Odia", "pa": "Punjabi",
+                "as": "Assamese", "sd": "Sindhi", "ks": "Kashmiri", "ne": "Nepali", "si": "Sinhala",
+                "sa": "Sanskrit", "ur": "Urdu", "bho": "Bhojpuri", "mai": "Maithili", "mni": "Manipuri",
+                "doi": "Dogri", "en": "English"
+            };
+
+            function populateLanguages() {
+                let languageSelect = document.getElementById("languageSelect");
+                languageSelect.innerHTML = "";
+                for (let code in allLanguages) {
+                    let option = document.createElement("option");
+                    option.value = code;
+                    option.textContent = allLanguages[code];
+                    languageSelect.appendChild(option);
+                }
+            }
+
+            // async function transliterate(text, lang) {
+            //     let response = await fetch(`https://inputtools.google.com/request?text=${text}&itc=${lang}-t-i0-und&num=1`);
+            //     let data = await response.json();
+            //     return data[1] ? data[1][0][1][0] : text;
+            // }
+
+            function checkInternetConnection() {
+                if (!navigator.onLine) {
+                    showNotification("No internet connection. Transliteration may not work.", "warning");
+                }
+            }
+
+            document.getElementById("inputBox").addEventListener("keyup", async function(event) {
+                checkInternetConnection();
+
+                if (event.key === " ") {
+                    let words = this.value.split(" ");
+                    let lastWord = words[words.length - 2];
+                    let lang = document.getElementById("languageSelect").value;
+                    try{
+                        let response = await fetch(`https://inputtools.google.com/request?text=${lastWord}&itc=${lang}-t-i0-und&num=1`);
+                        let data = await response.json();
+                        words[words.length - 2] = data[1] ? data[1][0][1][0] : lastWord;
+                        this.value = words.join(" ");
+                    }
+                    catch (error) {
+                        console.error("Error during transliteration:", error);
+                        showNotification("Transliteration failed. Please try again.", "error");
+                    }
+                }
+            });
+
+            document.getElementById("languageSelect").addEventListener("change", function() {
+                let selectedLanguage = this.value;
+                if (selectedLanguage === "en") {
+                    document.getElementById("inputBox").placeholder = "Type in English...";
+                } else {
+                    document.getElementById("inputBox").placeholder = `Type in ${allLanguages[selectedLanguage]}...`;
+                }
+            });
+
+            populateLanguages();
+        });
+
+        function copyText() {
+                let text = document.getElementById("inputBox").value;
+                navigator.clipboard.writeText(text);
+                showNotification("Text copied!", "success");
+            }
+
+            function saveText() {
+                let text = document.getElementById("inputBox").value;
+                let blob = new Blob([text], { type: "text/plain" });
+                let a = document.createElement("a");
+                a.href = URL.createObjectURL(blob);
+                a.download = "transliteration.txt";
+                a.click();
+            }
+
+            async function loadFont(url) {
+                const response = await fetch(url);
+                const fontData = await response.arrayBuffer();
+                return btoa(String.fromCharCode(...new Uint8Array(fontData)));
+            }
+
+            function savePDF() {
+                let text = document.getElementById("inputBox").value.trim();
+                if (!text) {
+                    showNotification("Text area is empty!", "error");
+                    return;
+                }
+
+                // ✅ Use PDFMake which supports Unicode & Indian languages
+                let docDefinition = {
+                    content: [{ text: text, fontSize: 16 }],
+                };
+
+                // ✅ Generate PDF
+                pdfMake.createPdf(docDefinition).download("transliteration.pdf");
+            }
+
+            function shareText() {
+                let text = document.getElementById("inputBox").value;
+                if (navigator.share) {
+                    navigator.share({ text: text })
+                        .then(() => console.log("Shared successfully"))
+                        .catch((error) => console.log("Error sharing", error));
+                } else {
+                    showNotification("Sharing not supported on this browser", "error");
+                }
+            }
+
+            function saveAsImage() {
+                let text = document.getElementById("inputBox").value;
+                if (!text.trim()) {
+                    showNotification("Text area is empty!", "error");
+                    return;
+                }
+
+                let tempDiv = document.createElement("div");
+                tempDiv.style.fontFamily = "Arial, sans-serif";
+                tempDiv.style.fontSize = "16px";
+                tempDiv.style.padding = "20px";
+                tempDiv.style.border = "1px solid black";
+                tempDiv.style.width = "fit-content";
+                tempDiv.style.whiteSpace = "pre-wrap";
+                tempDiv.innerText = text;
+
+                document.body.appendChild(tempDiv);
+
+                html2canvas(tempDiv, {
+                    scale: 2,
+                    backgroundColor: "#fff",
+                }).then((canvas) => {
+                    let link = document.createElement("a");
+                    link.href = canvas.toDataURL("image/png");
+                    link.download = "transliteration.png";
+                    link.click();
+                    document.body.removeChild(tempDiv);
+                });
+            }
+
+        document.getElementsByClassName("contact")[0].addEventListener("click", function() {
+            window.open("https://alxpace.netlify.app/", "_blank");
+        });
+
+        function dismissIntro() {
+            document.getElementById("intro").classList.add("hidden");
+            document.querySelector(".question").style.display = "inline";
+        }
+
+        function toggleIntro() {
+            let intro = document.getElementById("intro");
+            intro.classList.toggle("hidden");
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+            let toggleButton = document.querySelector(".toggle-mode");
+            if (document.body.classList.contains("dark-mode")) {
+                toggleButton.innerHTML = "🌞";
+            } else {
+                toggleButton.innerHTML = "🌙";
+            }
+            let intro = document.getElementById("intro");
+            if (document.body.classList.contains("dark-mode")) {
+                intro.style.color = "white";
+            } else {
+                intro.style.color = "black";
+            }
+        }
+
+        function showNotification(message, type = "success", duration = 3000) {
+            let container = document.getElementById("notification-container");
+
+            // Create new notification
+            let notification = document.createElement("div");
+            notification.classList.add("notification", type);
+            notification.innerText = message;
+
+            // Add new notification at the top
+            container.prepend(notification);
+
+            // Auto-remove notification after `duration`
+            setTimeout(() => {
+                notification.classList.add("fade-out");
+                setTimeout(() => {
+                    notification.remove();
+                }, 500); // Wait for fade-out animation
+            }, duration);
+        }
+
+        // Show the intro on page load
+        window.onload = function() {
+            let intro = document.getElementById("intro");
+            intro.classList.remove("hidden");
+            document.querySelector(".question").style.display = "none";
+        };
+
+        function showNoti(){
+            showNotification("Hello, World!","success");
+            showNotification("This is a warning!","warning");
+            showNotification("This is an error!","error");
+        }
+
+    </script>
+</body>
+</html>
